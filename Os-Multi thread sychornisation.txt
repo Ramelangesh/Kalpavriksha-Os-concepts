@@ -1,0 +1,36 @@
+import threading 
+import time
+balance = 100
+
+def deposit(): 
+    global balance
+    threadLock.acquire()
+    for i in range(1000000):
+        balance = balance + 1
+    threadLock.release()
+    
+        
+def withdraw(): 
+    global balance
+    for i in range(1000000):
+        balance = balance - 1
+threadLock = threading.Lock()
+if __name__ == "__main__": 
+    balance = int(input().strip())
+    # creating thread 
+    t1 = threading.Thread(target=deposit, args=()) 
+    t2 = threading.Thread(target=withdraw, args=()) 
+  
+    # starting thread 1 
+    t1.start() 
+    threadLock.acquire()
+    # starting thread 2 
+    t2.start() 
+  
+    # wait until thread 1 is completely executed 
+    t1.join() 
+    # wait until thread 2 is completely executed 
+    t2.join() 
+  
+    # both threads completely executed 
+    print("all done: balance = " + str(balance))
